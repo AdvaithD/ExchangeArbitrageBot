@@ -170,7 +170,7 @@ class Exchange:
         # print(reserve_body)
         reserve_request = self.authenticated_request(RESERVE_MARKET_ORDER,
                                                      'POST', reserve_body)
-        print(reserve_request.text)
+        # print(reserve_request.text)
         signed_order = self.signOrder(
             json.loads(reserve_request.text)['unsignedOrder'])
         market_order_ID = json.loads(reserve_request.text)['marketOrderID']
@@ -182,7 +182,7 @@ class Exchange:
 
         place_request = self.authenticated_request(PLACE_MARKET_ORDER, 'POST',
                                                    place_body)
-        print(place_request.text)
+        # print(place_request.text)
 
         history_request = self.authenticated_request(USER_HISTORY, 'GET', {})
         # print(history_request.text)
@@ -211,7 +211,7 @@ class Exchange:
         CANCEL_ORDER = self.API_URL + '/order/' + orderHash
         delete_request = self.authenticated_request(CANCEL_ORDER, 'DELETE', {})
         # print(delete_request.text)
-        print('Order successfully canceled')
+        print('Order successfully cancelled')
 
     def cancel_allOrders(self):
         history = self.get_user_history()
@@ -222,7 +222,7 @@ class Exchange:
                 i += 1
             else:
                 i += 1
-        print('All open orders successfully canceled')
+        print('All open orders successfully cancelled')
 
     def get_balance(self, tokensymbol):
         token_t_abi = json.loads(
@@ -268,7 +268,7 @@ class Exchange:
 
     def get_ticker_orderBook_innermost(self, tokenpair):
         orderBook = self.get_ticker_orderBook(tokenpair)
-        print(orderBook)
+        # print(orderBook)
         bestbid = [float(orderBook['bids'][0]['price']),
                    float(orderBook['bids'][0]['availableAmount'])/float(10**18)]
         bestask = [float(orderBook['asks'][0]['price']),
