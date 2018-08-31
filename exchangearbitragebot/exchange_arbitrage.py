@@ -116,10 +116,10 @@ class ExchangeArbitrage(object):
         # If both scenario1 and scenario2 return negative,
         # there are no arbitrage opportunities
         elif scenario1 < 0 and scenario2 < 0:
-            print('!!!!Scenario 4!!!!\n')
-            print('scenario1: {0}'.format(scenario1))
-            print('scenario2: {0}'.format(scenario2))
-            print('!!!!!!!!\n')
+            print('----Scenario 4----\n')
+            print('scenario1: {0:10f}'.format(scenario1))
+            print('scenario2: {0:10f}'.format(scenario2))
+            print('----\n')
 
             if abs(scenario1) > abs(scenario2):
                 pass
