@@ -9,11 +9,12 @@ import os
 
 
 class TokenContracts:
-    ZRX = '0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570'
-    ETH = '0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-    GNT = '0xef7fff64389b814a946f3e92105513705ca6b990'
-    MKR = '0x1dad4783cf3fe3085c1426157ab175a6119a04ba'
-    REP = '0xb18845c260f680d5b9d84649638813e342e4f8c9'
+    ZRX = '0xe41d2489571d322189246dafa5ebde1f4699f498'
+    ETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+    GNT = '0xa74476443119A942dE498590Fe1f2454d7D4aC0d'
+    MKR = '0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2'
+    REP = '0x1985365e9f78359a9B6AD760e32412f4a445E862'
+    BAT = '0x0d8775f648430679a709e98d2b0cb6250d2887ef'
 
     def ZRXETH():
         baseTokenAddress = TokenContracts.ZRX
@@ -22,6 +23,11 @@ class TokenContracts:
 
     def GNTETH():
         baseTokenAddress = TokenContracts.GNT
+        quoteTokenAddress = TokenContracts.ETH
+        return baseTokenAddress, quoteTokenAddress
+
+    def BATETH():
+        baseTokenAddress = TokenContracts.BAT
         quoteTokenAddress = TokenContracts.ETH
         return baseTokenAddress, quoteTokenAddress
 
@@ -70,7 +76,7 @@ class TokenContracts:
 
 class Exchange:
     def __init__(self):
-        self.API_URL = 'https://api.staging.theocean.trade/api/v0'  # 'https://api.dev.theocean.trade/api/v0'  #
+        self.API_URL = 'https://api.theocean.trade/v0'
         self.WEB3_URL = 'http://localhost:8545'
         self.API_KEY = os.environ['OCEAN_API_KEY']  #
         self.API_SECRET = os.environ['OCEAN_API_SECRET']  #
@@ -262,6 +268,7 @@ class Exchange:
 
     def get_ticker_orderBook_innermost(self, tokenpair):
         orderBook = self.get_ticker_orderBook(tokenpair)
+        print(orderBook)
         bestbid = [float(orderBook['bids'][0]['price']),
                    float(orderBook['bids'][0]['availableAmount'])/float(10**18)]
         bestask = [float(orderBook['asks'][0]['price']),
@@ -271,6 +278,6 @@ class Exchange:
 
 if __name__ == "__main__":
     ocean = Exchange()
-    print(ocean.get_user_history())
+#    print(ocean.get_user_history())
     print(ocean.get_ticker_orderBook_innermost('ZRXETH'))
     ###
