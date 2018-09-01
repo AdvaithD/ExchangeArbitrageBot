@@ -19,9 +19,7 @@ class ExchangeArbitrage(object):
         try:
             if self.check_balance():
                 arb_scenario = self.check_orderBook()
-                print('debug arb_scenario',arb_scenario)
                 if arb_scenario['scenario']:
-                    print('debug arb_scenario check2')
                     self.place_order(arb_scenario['scenario'], arb_scenario['ask'], arb_scenario['bid'], arb_scenario['amount'] )
                 else:
                     print('Arbitrage Scenario:', arb_scenario['scenario'], '-- No arbitrage opportunities or insufficient funds')
@@ -59,10 +57,10 @@ class ExchangeArbitrage(object):
 
         # The Ocean
         self.ocean_orderbook_innermost = self.theocean.get_ticker_orderBook_innermost(self.tokenpair)
-        # Binance best bid price & amount
+        # Ocean best ask price & amount
         ocean_bestbid_price = self.ocean_orderbook_innermost[0][0]
         ocean_bestbid_amount = self.ocean_orderbook_innermost[0][1]
-        # Binance best ask price & amount
+        # Ocean best ask price & amount
         ocean_bestask_price = self.ocean_orderbook_innermost[1][0]
         ocean_bestask_amount = self.ocean_orderbook_innermost[1][1]
 
@@ -114,8 +112,8 @@ class ExchangeArbitrage(object):
             if abs(scenario2) * maxAmount - fee > self.minProfit:
                 print("TheOcean's Bid Price: {0} is greater than Binance's Ask Price:{1}. Will Execute Scenario 2.".format(ocean_bestbid_price, binance_bestask_price))
                 return {'scenario': 2, 'ask': binance_bestask_price, 'bid': ocean_bestbid_price, 'amount': maxAmount}
-            else:
-                return {'scenario': 0}
+        else:
+            return {'scenario': 0}
 
         # Edge cases and alternate scenarios are a still work in progress.
         # Following are couple of scenarios that need to be implemented
@@ -142,7 +140,6 @@ class ExchangeArbitrage(object):
 
             if abs(scenario1) > abs(scenario2):
                 pass
-
             elif abs(scenario1) < abs(scenario2):
                 pass
 
@@ -174,4 +171,5 @@ class ExchangeArbitrage(object):
 if __name__ == '__main__':
 #    engine = ExchangeArbitrage('ZRXETH', True)
     engine = ExchangeArbitrage('ZRXETH')
-    print(engine.start_arbitrage())
+    #print(engine.start_arbitrage())
+    engine.start_arbitrage()

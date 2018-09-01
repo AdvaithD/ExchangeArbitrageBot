@@ -262,7 +262,7 @@ class Exchange:
 
     def get_ticker_orderBook_innermost(self, tokenpair):
         orderBook = self.get_ticker_orderBook(tokenpair)
-        # print(orderBook)
+        print(orderBook)
         bestbid = [float(orderBook['bids'][0]['price']),
                    float(orderBook['bids'][0]['availableAmount'])/float(10**18)]
         bestask = [float(orderBook['asks'][0]['price']),
