@@ -15,7 +15,6 @@ class ExchangeArbitrage(object):
     def start_arbitrage(self):
         print(strftime('Date: %b %d %Y  Time: %H:%M:%S'))
         print('Starting Exchange Arbitrage between Binance and The Ocean on',self.tokenA,self.tokenB)
-        print('Tokens: ',self.tokens)
         try:
             if self.check_balance():
                 arb_scenario = self.check_orderBook()
@@ -47,14 +46,6 @@ class ExchangeArbitrage(object):
         binance_bestask_price = self.binance_orderbook_innermost[1][0]
         binance_bestask_amount = self.binance_orderbook_innermost[1][1]
 
-        print('######BINANCE DEBUG######')
-        print('orderbook_innermost: ',self.binance_orderbook_innermost)
-        print('bestbid_price: ',binance_bestbid_price)
-        print('bestbid_amount: ',binance_bestbid_amount)
-        print('bestask_price: ',binance_bestask_price)
-        print('bestask_amount: ',binance_bestask_amount)
-        print('######BINANCE DEBUG######')
-
         # The Ocean
         self.ocean_orderbook_innermost = self.theocean.get_ticker_orderBook_innermost(self.tokenpair)
         # Ocean best ask price & amount
@@ -64,38 +55,19 @@ class ExchangeArbitrage(object):
         ocean_bestask_price = self.ocean_orderbook_innermost[1][0]
         ocean_bestask_amount = self.ocean_orderbook_innermost[1][1]
 
-        print('######OCEAN DEBUG######')
-        print('orderbook_innermost: ',self.ocean_orderbook_innermost)
-        print('bestbid_price: ',ocean_bestbid_price)
-        print('bestbid_amount: ',ocean_bestbid_amount)
-        print('bestask_price: ',ocean_bestask_price)
-        print('bestask_amount: ',ocean_bestask_amount)
-        print('######OCEAN DEBUG######')
-
-
         # If Scenario 1 > 0:
         # If the highest bid price at Binance is greater than lowest ask price
         # at Ocean, then buy from Ocean and sell to Binance
-        print('----\nScenario 1\n----')
+
         scenario1 = binance_bestbid_price - ocean_bestask_price
-        print('Binance Best Bid: ' ,binance_bestbid_price)
-        print('Ocean Best Ask:' ,ocean_bestask_price)
-        print('scenario1: {0:10f}'.format(scenario1))
-        print('----\n')
 
         # If Scenario 2 > 0:
         # If the highest bid price at Ocean is greater than lowest ask price
         # at Binance, then buy from Binance and sell to Ocean
-        print('----\nScenario 2\n----')
 
         scenario2 = ocean_bestbid_price - binance_bestask_price
-        print('Binance Best Ask: ' ,binance_bestask_price)
-        print('Ocean Best Bid:' ,ocean_bestbid_price)
-        print('scenario2: {0:10f}'.format(scenario2))
-        print('----\n')
 
         if scenario1 > 0:
-            print('Testing Scenario 1')
             maxAmount = self.get_max_amount(self.binance_orderbook_innermost[0], self.ocean_orderbook_innermost[1], 1)
             print('Max Amount for Scenario 1: {0:10f}'.format(maxAmount))
             fee = self.binance.feeRatio * maxAmount * binance_bestbid_price + self.theocean.feeRatio * maxAmount * ocean_bestask_price
@@ -105,7 +77,6 @@ class ExchangeArbitrage(object):
             else:
                 return {'scenario': 0}
         elif scenario2 > 0:
-            print('Testing Scenario 2')
             maxAmount = self.get_max_amount(self.ocean_orderbook_innermost[0], self.binance_orderbook_innermost[1], 2)
             print('Max Amount for Scenario 2: {0}'.format(maxAmount))
             fee = self.binance.feeRatio * maxAmount * binance_bestask_price + self.theocean.feeRatio * maxAmount * ocean_bestbid_price
@@ -133,11 +104,6 @@ class ExchangeArbitrage(object):
         # If both scenario1 and scenario2 return negative,
         # there are no arbitrage opportunities
         elif scenario1 < 0 and scenario2 < 0:
-            print('----Scenario 4----\n')
-            print('scenario1: {0:10f}'.format(scenario1))
-            print('scenario2: {0:10f}'.format(scenario2))
-            print('----\n')
-
             if abs(scenario1) > abs(scenario2):
                 pass
             elif abs(scenario1) < abs(scenario2):
@@ -169,7 +135,5 @@ class ExchangeArbitrage(object):
             self.theocean.place_order(self.tokenpair, 'sell', amount, bid)
 
 if __name__ == '__main__':
-#    engine = ExchangeArbitrage('ZRXETH', True)
     engine = ExchangeArbitrage('ZRXETH')
-    #print(engine.start_arbitrage())
     engine.start_arbitrage()

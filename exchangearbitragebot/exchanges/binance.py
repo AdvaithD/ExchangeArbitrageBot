@@ -139,5 +139,4 @@ class Exchange:
 
 if __name__ == "__main__":
     binance = Exchange()
-    print(binance.get_ticker_orderBook_innermost('ZRXETH'))
-    ###
+    binance.get_ticker_orderBook_innermost('ZRXETH')
