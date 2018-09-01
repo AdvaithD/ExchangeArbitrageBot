@@ -14,7 +14,6 @@ class TokenContracts:
     GNT = '0xa74476443119A942dE498590Fe1f2454d7D4aC0d'
     MKR = '0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2'
     REP = '0x1985365e9f78359a9B6AD760e32412f4a445E862'
-    BAT = '0x0d8775f648430679a709e98d2b0cb6250d2887ef'
 
     def ZRXETH():
         baseTokenAddress = TokenContracts.ZRX
@@ -23,11 +22,6 @@ class TokenContracts:
 
     def GNTETH():
         baseTokenAddress = TokenContracts.GNT
-        quoteTokenAddress = TokenContracts.ETH
-        return baseTokenAddress, quoteTokenAddress
-
-    def BATETH():
-        baseTokenAddress = TokenContracts.BAT
         quoteTokenAddress = TokenContracts.ETH
         return baseTokenAddress, quoteTokenAddress
 
@@ -280,4 +274,3 @@ if __name__ == "__main__":
     ocean = Exchange()
 #    print(ocean.get_user_history())
     print(ocean.get_ticker_orderBook_innermost('ZRXETH'))
-    ###

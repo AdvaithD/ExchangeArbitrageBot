@@ -4,7 +4,7 @@ from exchanges import binance, theocean
 class ExchangeArbitrage(object):
 
     def __init__(self, tokenpair):
-        self.minProfit = 0.005 # 0.00005  # Vary this based on tokens being traded and personal preferences
+        self.minProfit = 0.00005 # 0.00005  # Vary this based on tokens being traded and personal preferences
         self.tokenpair = tokenpair
         self.tokens = [tokenpair[i:i+3] for i in range(0, len(tokenpair), 3)]
         self.tokenA = self.tokens[0]
@@ -15,10 +15,11 @@ class ExchangeArbitrage(object):
     def start_arbitrage(self):
         print(strftime('Date: %b %d %Y  Time: %H:%M:%S'))
         print('Starting Exchange Arbitrage between Binance and The Ocean on',self.tokenA,self.tokenB)
+        print('Tokens: ',self.tokens)
         try:
             if self.check_balance():
                 arb_scenario = self.check_orderBook()
-                print('Arbitrage Scenario:',arb_scenario)
+                print('debug arb_scenario',arb_scenario)
                 if arb_scenario['scenario']:
                     print('debug arb_scenario check2')
                     self.place_order(arb_scenario['scenario'], arb_scenario['ask'], arb_scenario['bid'], arb_scenario['amount'] )
@@ -48,6 +49,14 @@ class ExchangeArbitrage(object):
         binance_bestask_price = self.binance_orderbook_innermost[1][0]
         binance_bestask_amount = self.binance_orderbook_innermost[1][1]
 
+        print('######BINANCE DEBUG######')
+        print('orderbook_innermost: ',self.binance_orderbook_innermost)
+        print('bestbid_price: ',binance_bestbid_price)
+        print('bestbid_amount: ',binance_bestbid_amount)
+        print('bestask_price: ',binance_bestask_price)
+        print('bestask_amount: ',binance_bestask_amount)
+        print('######BINANCE DEBUG######')
+
         # The Ocean
         self.ocean_orderbook_innermost = self.theocean.get_ticker_orderBook_innermost(self.tokenpair)
         # Binance best bid price & amount
@@ -56,6 +65,16 @@ class ExchangeArbitrage(object):
         # Binance best ask price & amount
         ocean_bestask_price = self.ocean_orderbook_innermost[1][0]
         ocean_bestask_amount = self.ocean_orderbook_innermost[1][1]
+
+        print('######OCEAN DEBUG######')
+        print('orderbook_innermost: ',self.ocean_orderbook_innermost)
+        print('bestbid_price: ',ocean_bestbid_price)
+        print('bestbid_amount: ',ocean_bestbid_amount)
+        print('bestask_price: ',ocean_bestask_price)
+        print('bestask_amount: ',ocean_bestask_amount)
+        print('######OCEAN DEBUG######')
+
+
         # If Scenario 1 > 0:
         # If the highest bid price at Binance is greater than lowest ask price
         # at Ocean, then buy from Ocean and sell to Binance
